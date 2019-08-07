@@ -41,3 +41,55 @@ It is possible to represent the data as a directed graph, where each node is a d
 ![alt text](https://github.com/mylonakk/PythonProgrammingTask2/blob/master/imgs/t1i9.png)
 
 People generally start cycling from 7am to 9pm during weekend, with most of the journeys starting during the time span 11am to 3pm. During the other days of the week people start from one hour earlier than at 6am and keep starting journeys till around 10 or 11 pm. The two distribution seem of similar shape with two key differences, first during weekend peak start hour is 3pm while the other's distribution peak is at 5pm. Second, at the working days distribution there is a sudden increase at 6am obviously because of people cycling to work.
+
+## Task 2 - Text data analysis
+
+The second task concerns the text file `midsummer.txt` which contains the text of William Shakespeare's play *A Midsummer Night's Dream*. The play contains 5 acts, each with 2 scenes, and the task is to investigate them, and in particular to decide how positive or negative each scene is.
+
+To that end, there are two more data files: `positive-words.txt` and `negative-words.txt`, which contain lists of positive and negative words respectively. These words come from the paper *Minqing Hu and Bing Liu. "Mining and summarizing customer reviews." Proceedings of the ACM SIGKDD International Conference on Knowledge Discovery & Data Mining, Seattle, Washington, USA, Aug 22-25, 2004*. So whilst the words are not ideal for our purpose (since they are mainly to do with product review sentiments), they still represent an interesting way to examine our scenes.
+
+- You should read in all three of the data files. You will need to split the play in 'midsummer.txt' up so that each scene can be considered individually.
+- You need to invent a metric for how positive or negative a given scene is, based on how many of the words in it are in the positive/negative word lists. For instance, is a scene containing one positive and one negative word: overall positive, negative or neutral? - try and develop a single measure based on the word occurrences that will describe the positivity/negativity of the scene.
+- Make a plot of the measure you have invented as a y-axis, with scene number as an x-axis.
+- When a character starts speaking, their name appears in capitals, on its own line. Which character(s) speak most often?
+- Can you use this data to answer any other questions about the data? For instance, could you compare different measures of positivity/negativity, or compare the pattern of positivity/negativity with that found in other plays? (You can find other texts on [the Project Gutenberg website](http://www.gutenberg.org/wiki/Main_Page).)
+
+Note - this is a very simplistic way of doing this kind of text analysis, there are far more complex things that can be done, but I think even the basic approach is cool and can give quite interesting results.
+
+Please include here all the code used to answer this question and generate any plots.
+
+![alt text](https://github.com/mylonakk/PythonProgrammingTask2/blob/master/imgs/t2i1.png)
+
+At the above plot I measure the sign and magnitude of the sentiment of the text of each scene. This measure consists of two steps:
+- represent each text with a vector.
+- using this vector assign a sentimental value.
+
+I have implemented 3 representation schemes, all of them create vectors that live in the space that the given positive and negative words span $\mathbb{R}^d$, where d is the number of all words in the given dictionaries. Therefore, each text is represented by a vector $v \in \mathbb{R}^d$ and the their values depend on the selected scheme:
+
+- binary: where $v_j = 1$ if the j-th word of the dictionary appears in the text, else $v_j = 0$.
+- term frequency (tf): $v_j = \frac{n}{N}$, where n is the number the j-th word appears in the text and N is the number of words in the text.
+- term frequency inverse document frequency (tf-idf): $v_j = tf(j)idf(j)$, where $idf(j) = \log\frac{D}{d}$, where D is the number of separate text in the corpus and d is the number of texts the j-th word appears.
+
+Now, since we have a representation vector for the text, we need some decision strategies to assign a sentiment measure to this text according to its representation. To make our lives easier we multiply elementwise each text vector with a vector that has 1 where the corresponding word belongs to the positive dictionary and -1 when it belongs to the negative one. 
+
+So the following decision strategies have been implemented:
+- $L_1$-norm, which is essential the sum of the vector elements.
+- $L_{\infty}$-norm, which is the max element of the vector.
+
+So, the measures compared in this plot are all the possible combination of the aforementioned representation schemes and decision strategies, except the case of binary with $L_{\infty}$-norm which obviously has no meaning.
+
+The first thing we notice is that binary measure magnitudes are larger than the other measures. Also, the measures binary, tf L1 and tf-idf L1 seem to follow the same trend, with the two latter to be highly correlated.
+
+![alt text](https://github.com/mylonakk/PythonProgrammingTask2/blob/master/imgs/t2i3.png)
+![alt text](https://github.com/mylonakk/PythonProgrammingTask2/blob/master/imgs/t2i4.png)
+
+At the top plot, it is illustrated the frequency at which each character speaks in the play. The bottom plot is a correlation matrix for the characters of the play. Each element $A_{ij}$ of the matrix corresponds to the correlation of character i with character j, in terms that one appears to the same scenes that the other one also appears.
+
+![alt text](https://github.com/mylonakk/PythonProgrammingTask2/blob/master/imgs/t2i5.png)
+
+Using exactly the same code, we illustrate the sentimental measure for two other William Shakespeare plays, Hamlet and Romeo and Juliet. It seems that a common pattern is for the schene sentiment to change sign at almost every step.
+
+[Hamlet reference link](http://www.gutenberg.org/ebooks/2265)
+
+[Romeo and Juliet reference link](http://www.gutenberg.org/ebooks/1777)
+The motivation for this plot is to identify closely related characters and measure the sentiment of their dialogues.
