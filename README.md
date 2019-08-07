@@ -13,5 +13,6 @@ Please include all the code used to generate your answer and plots, and remember
 
 Visual Results
 
+![alt text](https://github.com/mylonakk/PythonProgrammingTask2/blob/master/imgs/download.png)
 
 The above plot gives us an estimate about how much time do the people in Edinburgh spend on cycling depending on the day. The median duration during weekends seems to be higher than the other days at about 25 mins, which is reasonable. Moreover, during Saturday and Sunday 25% of the journeys take over 50 minutes and we see that maximum reaches 100 mins for Sunday and about 80 min for Saturday.
