@@ -33,3 +33,11 @@ Briefly the steps I followed to produce the above heat map are the following:
 - create a 3D matrix, where each xy slice is a snapshot in time and xy is the rectangle (therefore we have 24 slices)
 - Run over the whole dataset and add 1 to the cell corresponding to the arrival and departure station (x,y) of each row at corresponding time (z)
 - now each slice of the matrix is sparse with non-zero values only at some stations, but since I have quantize the time to hours only, so I have to diffuse some of the traffic around the stations, therefore I apply gaussian blur to each time snapshot.
+
+![alt text](https://github.com/mylonakk/PythonProgrammingTask2/blob/master/imgs/t1i8.png)
+
+It is possible to represent the data as a directed graph, where each node is a different bike station, an edge from node A to node B represents the journey from station A to station B and the weight of that edge is the times this journey appears in the day. To extract some valuable information, I have plotted the adjacency matrix for this graph for weekends and for the rest of the days separately.
+
+![alt text](https://github.com/mylonakk/PythonProgrammingTask2/blob/master/imgs/t1i9.png)
+
+People generally start cycling from 7am to 9pm during weekend, with most of the journeys starting during the time span 11am to 3pm. During the other days of the week people start from one hour earlier than at 6am and keep starting journeys till around 10 or 11 pm. The two distribution seem of similar shape with two key differences, first during weekend peak start hour is 3pm while the other's distribution peak is at 5pm. Second, at the working days distribution there is a sudden increase at 6am obviously because of people cycling to work.
